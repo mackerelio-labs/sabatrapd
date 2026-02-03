@@ -60,6 +60,12 @@ func main() {
 	}))
 	slog.SetDefault(logger)
 
+	version, err := conf.SNMPProtocolVersion()
+	if err != nil {
+		slog.Error(err.Error())
+		os.Exit(1)
+	}
+
 	// init mib parser
 	var mibParser smi.SMI
 	if conf.MIB != nil {
@@ -122,6 +128,7 @@ func main() {
 	}
 	handle := &handler.Handler{
 		Community: conf.TrapServer.Community,
+		Version:   version,
 		Traps:     traps,
 
 		Queue:     queue,

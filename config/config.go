@@ -49,6 +49,8 @@ type Config struct {
 	Encoding   []*Encoding `yaml:"encoding"`
 
 	Version string `yaml:"version"`
+
+	SNMPv3 *yamlSNMPv3 `yaml:"snmpv3"`
 }
 
 const (

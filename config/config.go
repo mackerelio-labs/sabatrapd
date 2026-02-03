@@ -53,6 +53,7 @@ type Config struct {
 
 const (
 	SNMPV2c = "SNMPv2c"
+	SNMPV3  = "SNMPv3"
 )
 
 func (c *Config) SNMPProtocolVersion() (string, error) {
@@ -61,8 +62,10 @@ func (c *Config) SNMPProtocolVersion() (string, error) {
 		return SNMPV2c, nil
 	case "v2c":
 		return SNMPV2c, nil
+	case "v3":
+		return SNMPV3, nil
 	}
-	return "", fmt.Errorf("invalid snmp protocol version (v2c) : %s", c.Version)
+	return "", fmt.Errorf("invalid snmp protocol version (v2c, v3) : %s", c.Version)
 }
 
 func (c *Config) RunningMode() string {

@@ -128,6 +128,11 @@ func TestSNMPProtocolVersion(t *testing.T) {
 			wantErr:  false,
 		},
 		{
+			input:    "v3",
+			expected: SNMPV3,
+			wantErr:  false,
+		},
+		{
 			input:    "foo",
 			expected: "",
 			wantErr:  true,

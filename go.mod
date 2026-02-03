@@ -1,9 +1,9 @@
 module github.com/mackerelio-labs/sabatrapd
 
-go 1.23.0
+go 1.24.0
 
 require (
-	github.com/gosnmp/gosnmp v1.35.0
+	github.com/gosnmp/gosnmp v1.43.2
 	github.com/mackerelio/mackerel-client-go v0.24.0
 	github.com/sleepinggenius2/gosmi v0.4.4
 	golang.org/x/text v0.7.0

@@ -144,7 +144,29 @@ func main() {
 
 	trapListener := g.NewTrapListener()
 	trapListener.OnNewTrap = handle.OnNewTrap
-	trapListener.Params = g.Default
+
+	gs := g.Default
+	if version == config.SNMPV3 {
+		usms, err := conf.ValidateSNMPV3()
+		if err != nil {
+			slog.Error("snmpv3.users is invalid", slog.String("error", err.Error()))
+			os.Exit(1)
+		}
+
+		usmTable := g.NewSnmpV3SecurityParametersTable(g.NewLogger(trapListenerLogger{}))
+		for _, sp := range usms {
+			if err := usmTable.Add(sp.SecurityParameters().UserName, sp.SecurityParameters()); err != nil {
+				usmTable.Logger.Print(err)
+			}
+		}
+
+		gs.Version = g.Version3
+		gs.SecurityModel = g.UserSecurityModel
+		gs.SecurityParameters = &g.UsmSecurityParameters{AuthoritativeEngineID: conf.SNMPv3.AuthoritativeEngineID}
+		gs.TrapSecurityParametersTable = usmTable
+	}
+	trapListener.Params = gs
+
 	trapListener.Params.Logger = g.NewLogger(trapListenerLogger{})
 
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt)

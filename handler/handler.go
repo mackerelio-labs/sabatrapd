@@ -22,6 +22,7 @@ const SnmpTrapOIDPrefix = ".1.3.6.1.6.3.1.1.4.1"
 
 type Handler struct {
 	Community string
+	Version   string
 	Traps     []*config.Trap
 
 	Queue     *notification.Queue
@@ -32,7 +33,7 @@ type Handler struct {
 func (h *Handler) OnNewTrap(packet *g.SnmpPacket, addr *net.UDPAddr) {
 	// log.Printf("got trapdata from %s\n", addr.IP)
 
-	if h.Community != "" && h.Community != packet.Community {
+	if h.Version == config.SNMPV2c && h.Community != "" && h.Community != packet.Community {
 		slog.Warn("invalid community", "expected", h.Community, "received", packet.Community)
 		return
 	}

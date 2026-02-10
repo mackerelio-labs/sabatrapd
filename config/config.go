@@ -2,6 +2,7 @@ package config
 
 import (
 	"cmp"
+	"fmt"
 	"log/slog"
 	"slices"
 
@@ -46,6 +47,27 @@ type Config struct {
 	DryRun     bool        `yaml:"dry-run"`
 	Mackerel   *Mackerel   `yaml:"mackerel"`
 	Encoding   []*Encoding `yaml:"encoding"`
+
+	Version string `yaml:"version"`
+
+	SNMPv3 *yamlSNMPv3 `yaml:"snmpv3"`
+}
+
+const (
+	SNMPV2c = "SNMPv2c"
+	SNMPV3  = "SNMPv3"
+)
+
+func (c *Config) SNMPProtocolVersion() (string, error) {
+	switch c.Version {
+	case "":
+		return SNMPV2c, nil
+	case "v2c":
+		return SNMPV2c, nil
+	case "v3":
+		return SNMPV3, nil
+	}
+	return "", fmt.Errorf("invalid snmp protocol version (v2c, v3) : %s", c.Version)
 }
 
 func (c *Config) RunningMode() string {

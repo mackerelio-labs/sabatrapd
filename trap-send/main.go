@@ -16,7 +16,7 @@ func main() {
 	if err != nil {
 		log.Fatalf("Connect() err: %v", err)
 	}
-	defer g.Default.Conn.Close()
+	defer g.Default.Conn.Close() // nolint
 
 	trap := g.SnmpTrap{
 		Variables: []g.SnmpPDU{
